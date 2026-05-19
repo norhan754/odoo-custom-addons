@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_view_form_inherit_transfer_team" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.transfer.team</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header/field[@name='stage_id']" position="before">
+                <button
+                    name="action_open_transfer_team_wizard"
+                    type="object"
+                    string="Transfer To Another Team"
+                    class="btn-secondary"
+                    groups="helpdesk.group_helpdesk_user"
+                    invisible="not id"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

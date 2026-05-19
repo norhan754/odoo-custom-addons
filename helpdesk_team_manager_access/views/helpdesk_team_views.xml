@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_team_view_form_inherit_team_manager" model="ir.ui.view">
+        <field name="name">helpdesk.team.form.inherit.team.manager</field>
+        <field name="model">helpdesk.team</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='message_partner_ids']/ancestor::div[contains(@class, 'mt16')]" position="after">
+                <div class="mt16" groups="helpdesk.group_helpdesk_manager">
+                    <label for="team_manager_id"/>
+                    <field
+                        name="team_manager_id"
+                        class="ms-2"
+                        options="{'no_create': True, 'no_quick_create': True}"
+                    />
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

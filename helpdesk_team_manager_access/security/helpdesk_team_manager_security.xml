@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_helpdesk_team_manager" model="res.groups">
+        <field name="name">Team Manager</field>
+        <field name="category_id" ref="base.module_category_services_helpdesk"/>
+        <field name="implied_ids" eval="[(4, ref('helpdesk.group_helpdesk_user'))]"/>
+    </record>
+
+    <record id="helpdesk_ticket_team_manager_rule" model="ir.rule">
+        <field name="name">Helpdesk Ticket: team manager tickets</field>
+        <field name="model_id" ref="helpdesk.model_helpdesk_ticket"/>
+        <field name="domain_force">[('team_id.team_manager_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('helpdesk_team_manager_access.group_helpdesk_team_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="helpdesk_team_team_manager_rule" model="ir.rule">
+        <field name="name">Helpdesk Team: team manager own teams</field>
+        <field name="model_id" ref="helpdesk.model_helpdesk_team"/>
+        <field name="domain_force">[('team_manager_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('helpdesk_team_manager_access.group_helpdesk_team_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>

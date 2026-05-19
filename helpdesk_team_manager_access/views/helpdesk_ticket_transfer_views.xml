@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_team_transfer_wizard_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.team.transfer.wizard.form</field>
+        <field name="model">helpdesk.ticket.team.transfer.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Transfer To Another Team">
+                <group>
+                    <field name="ticket_id" invisible="1"/>
+                    <field name="current_team_id" readonly="1"/>
+                    <field
+                        name="team_id"
+                        domain="[('id', '!=', current_team_id)]"
+                        options="{'no_create': True, 'no_quick_create': True}"
+                    />
+                    <field name="manager_id" readonly="1"/>
+                </group>
+                <footer>
+                    <button
+                        name="action_transfer"
+                        string="Transfer"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
