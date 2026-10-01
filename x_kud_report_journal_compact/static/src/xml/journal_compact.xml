@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="x_kud_report_journal_compact.AccountReportFilterJournal"
+       t-inherit="account_reports.AccountReportFilterJournal"
+       t-inherit-mode="extension">
+
+        <!-- Controls first, so the collapsed/expanded state is always in view.
+             It used to sit under the list, where the dropdown's own scrollbar
+             hid it and an expanded list looked like the filter had failed. -->
+        <xpath expr="//t[@t-set-slot='toggler']" position="after">
+            <!-- Ticked while the report already runs on every journal. Odoo
+                 clears every tick in that state (_init_options_journals), so
+                 without this the entry looks dead exactly when it is in
+                 force. -->
+            <DropdownItem
+                class="{ 'ps-4': true, 'selected': !kudAnyJournalSelected }"
+                onSelected="() => this.kudSelectAllJournals()"
+            >
+                <i class="fa fa-check-square-o me-1"/>Select all journals
+            </DropdownItem>
+            <!-- Odoo stores "every journal" and "no filter" as the same state
+                 and shows no ticks for it, so say in words what the empty
+                 ticks mean. -->
+            <t t-if="!kudAnyJournalSelected">
+                <div class="dropdown-item-text ps-4 pt-0 small text-success">
+                    <i class="fa fa-info-circle me-1"/>All <t t-esc="kudIndividualJournalCount"/> journals are included - no filter is set.
+                </div>
+            </t>
+            <t t-if="kudShowUnselectAll">
+                <DropdownItem
+                    class="{ 'ps-4': true, 'text-danger': true }"
+                    onSelected="() => this.kudUnselectAllJournals()"
+                >
+                    <i class="fa fa-times-circle me-1"/>Unselect all journals
+                </DropdownItem>
+            </t>
+            <t t-if="kudIndividualJournalCount">
+                <DropdownItem
+                    class="{ 'ps-4': true, 'text-muted': true, 'small': true }"
+                    parentClosingMode="'none'"
+                    onSelected="() => this.kudToggleIndividualJournals()"
+                >
+                    <t t-if="kudShowIndividualJournals">
+                        <i class="fa fa-caret-up me-1"/>Hide individual journals
+                    </t>
+                    <t t-else="">
+                        <i class="fa fa-caret-down me-1"/>Show individual journals (<t t-esc="kudIndividualJournalCount"/>)
+                    </t>
+                </DropdownItem>
+            </t>
+            <div class="dropdown-divider"/>
+        </xpath>
+
+        <!-- Say which company a group belongs to when several are open. -->
+        <xpath expr="//DropdownItem/t[@t-esc='journal.name']" position="replace">
+            <t t-esc="kudRowLabel(journal)"/>
+        </xpath>
+
+        <!-- Draw a filtered VIEW of the rows. `controller.options.journals`
+             stays untouched, so the report domain is unaffected. -->
+        <xpath expr="//t[@t-foreach='controller.options.journals']" position="attributes">
+            <attribute name="t-foreach">kudVisibleJournalRows</attribute>
+        </xpath>
+
+    </t>
+
+</templates>
